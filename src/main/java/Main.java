@@ -67,5 +67,28 @@ public class Main {
                 })
                 .sorted(Comparator.comparing(Employee::getName))
                 .forEach(emp -> System.out.println(emp));
+        System.out.println("\n");
+
+        //Output salaries in ascending order
+        employeeList.stream()
+                .sorted(Comparator.comparing(Employee::getSalary))
+                .forEach(e -> System.out.println(e.getSalary()));
+        System.out.println("\n");
+
+        //List of names with salary over 25000
+        employeeList.stream()
+                .filter(e -> e.getSalary()>25000)
+                .forEach(e -> System.out.println(e.getName()));
+        System.out.println("\n");
+
+        //Give everyone a $500 raise
+        employeeList.stream()
+                .map( emp -> {
+                    Employee empDTO = new Employee(emp.getId(), emp.getName(), emp.getAge(), emp.getGender(), emp.getDepartment(), emp.getYearOfJoining(), emp.getSalary());
+                    empDTO.setSalary( emp.getSalary()+500 );
+                    return empDTO;
+                })
+                .sorted(Comparator.comparing(Employee::getName))
+                .forEach(emp -> System.out.println(emp));
     }
 }
