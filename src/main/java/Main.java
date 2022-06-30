@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -51,7 +52,7 @@ public class Main {
         //add 10 to each age
         employeeList.stream()
                 .map( emp -> {
-                    Employee empDTO = new Employee(emp.getId(), emp.getName(), emp.getAge(), emp.getGender(), emp.getDepartment(), emp.getYearOfJoining(), emp.getSalary());
+                    Employee empDTO = new Employee(emp);
                     empDTO.setAge( emp.getAge() + 10);
                     return empDTO;
                 })
@@ -61,7 +62,7 @@ public class Main {
         //change all names to uppercase
         employeeList.stream()
                 .map( emp -> {
-                    Employee empDTO = new Employee(emp.getId(), emp.getName(), emp.getAge(), emp.getGender(), emp.getDepartment(), emp.getYearOfJoining(), emp.getSalary());
+                    Employee empDTO = new Employee(emp);
                     empDTO.setName( emp.getName().toUpperCase() );
                     return empDTO;
                 })
@@ -84,11 +85,59 @@ public class Main {
         //Give everyone a $500 raise
         employeeList.stream()
                 .map( emp -> {
-                    Employee empDTO = new Employee(emp.getId(), emp.getName(), emp.getAge(), emp.getGender(), emp.getDepartment(), emp.getYearOfJoining(), emp.getSalary());
+                    Employee empDTO = new Employee(emp);
                     empDTO.setSalary( emp.getSalary()+500 );
                     return empDTO;
                 })
                 .sorted(Comparator.comparing(Employee::getName))
-                .forEach(emp -> System.out.println(emp));
+                .forEach(System.out::println);
+
+        //IO
+        BufferedOutputStream out = null;
+        try{
+            out = new BufferedOutputStream(new FileOutputStream("data.txt"));
+            List<Employee> outData = employeeList;
+            for (Employee emp : outData){
+                var outString = emp + "\n";
+                byte[] array = outString.getBytes();
+                out.write(array);
+            }
+        }
+        catch (FileNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        finally {
+            try{
+                out.close();
+            }
+            catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        BufferedInputStream in = null;
+        try{
+            in = new BufferedInputStream(new FileInputStream("data.txt"));
+            while(in.available() > 0){
+                char data = (char) in.read();
+                System.out.print(data);
+            }
+        }
+        catch (FileNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try{
+                out.close();
+            }
+            catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

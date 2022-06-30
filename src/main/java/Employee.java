@@ -24,7 +24,16 @@ class Employee
         this.yearOfJoining = yearOfJoining;
         this.salary = salary;
     }
-
+    public Employee(Employee emp)
+    {
+        this.id = emp.getId();
+        this.name = emp.getName();
+        this.age = emp.getAge();
+        this.gender = emp.getGender();
+        this.department = emp.getDepartment();
+        this.yearOfJoining = emp.getYearOfJoining();
+        this.salary = emp.getSalary();
+    }
     public int getId()
     {
         return id;
